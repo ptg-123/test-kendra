@@ -1,0 +1,41 @@
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
+import com.amazonaws.services.workmail.AWSWorkMail;
+import com.amazonaws.services.workmail.AWSWorkMailClient;
+import com.amazonaws.services.workmail.model.*;
+import java.util.List;
+
+public class WorkMailEmailLister {
+
+    public static void main(String[] args) {
+//Hello Eshwar
+        // Create an AWS WorkMail client
+        AWSWorkMail workMailClient = AWSWorkMailClient.builder()
+                .withCredentials(DefaultAWSCredentialsProviderChain.getInstance())
+                .withRegion("us-east-1")  // Replace with your desired region
+                .build();
+
+        // Specify the organization ID
+        String organizationId = "your-organization-id";  // Replace with your actual organization ID
+
+        // List emails in the organization's mailbox
+        ListEmailsRequest listEmailsRequest = new ListEmailsRequest()
+                .withOrganizationId(organizationId);
+
+        ListEmailsResult listEmailsResult = workMailClient.listEmails(listEmailsRequest);
+
+        // Process the list of emails
+        List<EmailMetadata> emailMetadataList = listEmailsResult.getEmails();
+        for (EmailMetadata emailMetadata : emailMetadataList) {
+            System.out.println("Email Subject: " + emailMetadata.getSubject());
+            // Add more fields to retrieve and display as needed
+        }
+    }
+}
+
+==========================
+		<!-- https://mvnrepository.com/artifact/software.amazon.awssdk/workmail -->
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>workmail</artifactId>
+			<version>2.20.125</version>
+		</dependency>
